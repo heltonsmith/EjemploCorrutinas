@@ -1,5 +1,6 @@
 package com.heltonbustos.ejemplocorrutinas01
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -7,6 +8,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,19 +28,28 @@ class MainActivity : AppCompatActivity() {
             var pass:String = txtPass.text.toString()
 
             progressBar.visibility = View.VISIBLE
-            var x:Boolean = validarUSer(user, pass) //tarea larga y bloqueada
-            progressBar.visibility = View.GONE
-            if(x){
-                Toast.makeText(applicationContext, "Válido", Toast.LENGTH_SHORT).show()
+
+            GlobalScope.launch(Dispatchers.Main) {
+                var x:Boolean = validarUser(user, pass) //tarea larga y bloqueada
+                progressBar.visibility = View.GONE
+                if(x){
+
+                    val intent = Intent(applicationContext, Bienvenida::class.java)
+                    intent.putExtra("usuario", user)
+                    startActivity(intent)
+
+                }
+                else{
+                    Toast.makeText(applicationContext, "Inválido", Toast.LENGTH_SHORT).show()
+                }
             }
-            else{
-                Toast.makeText(applicationContext, "Inválido", Toast.LENGTH_SHORT).show()
-            }
+
+
         }
     }
 
-    fun validarUSer(user: String, pass: String): Boolean{
-        Thread.sleep(7000)
+    suspend fun validarUser(user: String, pass: String): Boolean{
+        delay(timeMillis = 7000)
         if(user == "admin" && pass == "123"){
             return true
         }

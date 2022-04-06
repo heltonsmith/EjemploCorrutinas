@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EjemploCorrutinas01">
         <activity
+            android:name=".Bienvenida"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
