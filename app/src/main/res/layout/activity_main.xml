@@ -26,6 +26,12 @@
         android:inputType="textPersonName"
         android:minHeight="48dp" />
 
+    <CheckBox
+        android:id="@+id/chkDatos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="¿Recordar Datos?" />
+
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
@@ -39,9 +45,4 @@
         android:layout_height="wrap_content"
         android:visibility="gone" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Registrar" />
 </LinearLayout>
