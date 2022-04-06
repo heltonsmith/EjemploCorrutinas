@@ -8,15 +8,21 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), CoroutineScope {
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
+    lateinit var job: Job
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        job = SupervisorJob()
 
         var progressBar: ProgressBar = findViewById(R.id.progressBar)
         var txtUser: EditText = findViewById(R.id.txtUser)
@@ -29,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
             progressBar.visibility = View.VISIBLE
 
-            GlobalScope.launch(Dispatchers.Main) {
+           launch {
                 var x:Boolean = validarUser(user, pass) //tarea larga y bloqueada
                 progressBar.visibility = View.GONE
                 if(x){
@@ -55,4 +61,10 @@ class MainActivity : AppCompatActivity() {
         }
         return false
     }
+
+    override fun onDestroy() {
+        job.cancel()
+        super.onDestroy()
+    }
+
 }
